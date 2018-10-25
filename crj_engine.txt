@@ -1,0 +1,12 @@
+sfx/eng_low.wav    #path to sound file
+40, 70          #min volume, target volume
+0, 100             #start and end point (% on slider)
+50, 0             #fade in and fade out range (% on slider)
+sfx/eng_hi.wav
+0, 90
+30, 100
+50, 0
+sfx/eng_whine.wav
+0, 100
+70, 100
+20, 0

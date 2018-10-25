@@ -1,0 +1,63 @@
+13800		#mass
+72000       	#thrust 72000
+287		#surface area 287
+49      	#wing area 49
+3.0		#angle of incidence
+1.5             #elevator coef
+0.001           #gear drag coef
+500000.0	#brakes friction coef
+1.0		#rolling friction coef
+100.0		#skid normal coef
+100000		#skid damp
+22.0		#nose spring coef
+8000		#nose spring damp
+6.0		#main spring coef
+50000		#main spring damp
+0.01		#skid collision tolerance
+1000		#nose weight
+750		#tail weight
+20.0		#max elevator
+0.01		#min thrust
+0.001		#thrust increment
+crj		#sprite folder
+0		#image index
+1.0		#ap rotate scale
+0.1		#ap elevator scale
+0.1		#target climb rate
+1.0		#target accel
+20.0		#max pitch
+30.0		#max elevator
+2.0		#rotation resistance
+100.0 		#max drag
+0.0 		#fuel tank initial
+12000		#fuel tank max
+25.0, 60.0	#peak lift aoa, max aoa
+2.5, 3.5 	#lift coefficient range
+0.1, 1.0	#surface area coef range
+0.015, 0.008   #c drag, base c drag
+10, 30		#flaps increment, max flaps
+0.01, 0.0001   #flaps lift, drag coef
+3.0, 0.003      #speed brake lift, drag coef
+0.9, 0.3    	#main gear height, spring travel
+0.85, 0.3	#nose gear height, spring travel
+0.05, 0.29	#main spring min, base position
+0.05, 0.29	#nose spring min, base position
+0.2, 0.2  	#nozzle drag coef, drag coef
+-12.61, 0.67	#tail
+-13.39, 4.22	#elevator
+-9.88, -0.25	#rear skid
+-9.28, 1.11	#exhaust
+-0.75, 1.89	#top
+0.0, -1.0	#bottom
+0.0, 0.0	#center
+-1.60, -0.83	#main gear
+8.78, -0.78	#front skid
+9.72, -0.65	#nose gear
+11.78, -0.11 	#nose
+10.83, -0.56	#nozzle
+4.33, 1.94	#top beacon
+4.33, -0.83	#bottom beacon
+-14.78, 4.22	#stab
+-10.44, 2.67	#front stab
+8.33, 1.83     #top nose
+266, 82		#image midpoint

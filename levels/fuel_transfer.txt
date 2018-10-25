@@ -1,0 +1,33 @@
+Fuel Transfer   #title
+Intercept fuel tanker in flight above mountains, transfer required fuel, and deliver at destination airbase.  #description
+10 #max wind
+1500 #ceiling
+1000000 #environment width
+200000 #environment height
+800 #environment scale
+400 #ground altitude msl
+40 #step size
+2500 #mountain height
+8000 #mountain width
+8725 #mountain 1 start
+66000 #mountain 2 start
+7000 #runway 1 start
+1900 #runway 1 length
+55000 #runway 2 start
+5000 #runway 2 length
+Takeoff #waypoint labels, corresponds to waypoint list below
+Climbout
+Intercept
+Breakoff
+Approach
+Landing #last waypoint label
+0.0, 0.05 #player 1 vector must be greater than 0 //0.02
+0.0, 0.9 #player 2 vector
+7050, 403 #player 1 start
+2000, 3000 #player 2 start
+7100, 400 #0 waypoint
+13200, 1500 #1
+21000, 3000 #2
+32000, 3000 #3
+40000, 1500 #4
+50000, 400 #5

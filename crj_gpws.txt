@@ -1,0 +1,4 @@
+./sfx/gpws_ground.wav    #path to sound file
+50.0, 50.0           #min volume, target volume
+0.0, 100.0             #start and end point (% on slider)
+0.0, 0.0             #fade in and fade out range (% on slider)

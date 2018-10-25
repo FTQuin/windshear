@@ -1,0 +1,8 @@
+sfx/ev_wind.wav    #path to sound file
+10.0, 80.0           #min volume, target volume
+0.0, 100.0             #start and end point (% on slider)
+80.0, 0.0             #fade in and fade out range (% on slider)
+sfx/env_roll.wav    #path to sound file
+0.0, 80.0           #min volume, target volume
+0.0, 100.0             #start and end point (% on slider)
+80.0, 0.0             #fade in and fade out range (% on slider)
