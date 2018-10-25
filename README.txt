@@ -35,10 +35,13 @@ Default level:
 11. After the fuel tank is full, press "S" again to switch back to the flight plan navigation.
 12. Fly the waypoints.
 13. During approach, gradually descend and slow down as you glide towards the Landing waypoint.
+    13 - The glideslope indicator to the left of the waypoint on the HUD will show if you are too high
+	or too low on your approach to the runway (above middle = too high, below middle = too low)
 14. Lower the landing gear by pressing "G".
 15. As you slow down, press "V" to lower flaps. Do it one step at a time and adjust your flight path
-    for optimal glide.
-16. ***UNFINISHED ***
+    for optimal glide. Keep the glideslop indicator centered.
+	15 - Flare right before touchdown by sharply pitching upward. If you land too hard the gear will break
+	and you will crash.
 16. After touchdown, immediately cut thrust to minimum, press "B" to activate speed brakes,
      then press "Space" to activate wheel brakes.
 17. Once you slow down to taxi speed, if you are still on the runway and the fuel transfer
