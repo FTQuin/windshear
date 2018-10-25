@@ -139,12 +139,17 @@ class Collision {
 				if((i + 1) % 2 == 0)
 					betweenPlayers[vectorIndex].flip();
 		
-				if(i == 0)//hack
+				if(TERRAIN_MODE) {
+					if(i == 0)//hack
+						trees[i] = constructBST(meshes[i], betweenPlayers[vectorIndex]
+							, locations[i], rotations[i]);
+					else
+						trees[i] = constructTerrainBST(meshes[i], betweenPlayers[vectorIndex]
+							, locations[0], rotations[i]);
+				} else {
 					trees[i] = constructBST(meshes[i], betweenPlayers[vectorIndex]
-						, locations[i], rotations[i]);
-				else
-					trees[i] = constructTerrainBST(meshes[i], betweenPlayers[vectorIndex]
-						, locations[0], rotations[i]);
+							, locations[i], rotations[i]);
+				}
 						
 				//Debug.print("" + trees[i]);
 				//populate candidate point & vector arrays plus global nearest point list
@@ -156,10 +161,14 @@ class Collision {
 						nearestPoints.add(points[i][j]);
 						Point tempPoint = points[i][j].copy();
 						
-						if(i == 0)//hack
+						if(TERRAIN_MODE) {
+							if(i == 0)//hack
+								tempPoint.translate(locations[i]);
+							else
+								tempPoint.translate(locations[0].getX(), locations[0].getY());
+						} else {
 							tempPoint.translate(locations[i]);
-						else
-							tempPoint.translate(locations[0].getX(), locations[0].getY());
+						}
 						
 						//Debug.print("new tempP " + tempPoint);
 						candidatesPoints[i].add(tempPoint);

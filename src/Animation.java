@@ -32,10 +32,14 @@ class Animation {
 	public int mapPercentToKeyframe(double p) {
 		if(p < 0.0) {
 			p = 0.0;
-			Debug.print("Animation.java:mapPercentToKeyframe(): p must be >= 0.0");
+			
+			if(Debug.verbose)
+				Debug.print("Animation.java:mapPercentToKeyframe(): p must be >= 0.0");
 		} else if (p > 1.0) {
 			p = 1.0;
-			Debug.print("Animation.java:mapPercentToKeyframe(): p must be <= 1.0");
+			
+			if(Debug.verbose)
+				Debug.print("Animation.java:mapPercentToKeyframe(): p must be <= 1.0");
 		}
 
 		return (int) Math.floor(keyframes.length * p);

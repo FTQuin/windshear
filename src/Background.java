@@ -219,8 +219,8 @@ class Background {
 		spawnArea = new Rectangle(viewport.getWidth() * HZ_S_SPAWN_AREA
 			, viewport.getHeight() * VT_S_SPAWN_AREA);
 		N_CLOUDS = (int) (CLOUD_MULTIPLIER * (spawnArea.getWidth() / cloudSize.getWidth()));
-		System.out.println("N_CLOUDS " + N_CLOUDS);
-				clouds = new Point[N_CLOUDS];
+		//System.out.println("N_CLOUDS " + N_CLOUDS);
+		clouds = new Point[N_CLOUDS];
 		types = new CloudType[N_CLOUDS];
 		cloudSpawnMin = new Point(0, 0);
 		double side = Math.max(cloudSize.getWidth(), cloudSize.getHeight());
@@ -328,7 +328,7 @@ class Background {
 
 		mountainTiles = new Tile[mtnBgRows * mtnBgCols];
 
-		System.out.println("NUM ROWS/COLS " + rows + "/" + cols);
+		//System.out.println("NUM ROWS/COLS " + rows + "/" + cols);
 
 		//Initialize background
 		Random r = new Random();
@@ -537,7 +537,7 @@ class Background {
 			//if(yFlip == 0)
 			//	yFlip = 1;
 
-			Debug.print("xF, yF " + xFlip + " " + yFlip);
+			//Debug.print("xF, yF " + xFlip + " " + yFlip);
 			tx = AffineTransform.getScaleInstance(xFlip, yFlip);
 
 			if(xFlip > 0)
@@ -708,8 +708,8 @@ class Background {
 
 				offset = new Vector(bg).flip();
 				offset.setMagnitude(min);
-				System.out.println(offset);
-				System.out.println(newLoc);
+				//System.out.println(offset);
+				//System.out.println(newLoc);
 				newLoc = Point.add(Point.add(newLoc, new Point(offset)), cloudLayerCenter);
 
 				/* very inefficient! this might run 50 or more times in one frame.

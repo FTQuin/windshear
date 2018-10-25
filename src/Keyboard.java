@@ -104,7 +104,7 @@ class Keyboard extends KeyAdapter {
 			case KeyEvent.VK_S:
 				code = KeyCode.TARGET;
 				break;
-			case KeyEvent.VK_ENTER:
+			case KeyEvent.VK_SPACE:
 				code = KeyCode.BRAKES;
 				break;
 			case KeyEvent.VK_U:

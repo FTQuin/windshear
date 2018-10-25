@@ -58,7 +58,7 @@ public class Game {
 
 	private static final int GROUND_SCREEN_LIMIT = SCREEN_HEIGHT - 150;//# of px from bottom of screen
 	private static final int NAV_AQUIRE_RANGE = 50000;
-	private static final int TERRAIN_MODE_LIMIT = 50;
+	private static final int TERRAIN_MODE_LIMIT = 200;
 
 	/* Game constants */
 	private static final double FG_SCALE = 18.0 * PLAYER_SPRITE_SCALE;
@@ -147,7 +147,7 @@ public class Game {
 	private static final int HUD_HEIGHT = 66;
 	private static final int HUD_START_Y = SCREEN_HEIGHT - HUD_HEIGHT;
 	private static final Color GROUND_WARNING_COLOR = new Color(196, 157, 129);
-	private static final double GLIDESLOPE_INDICATOR_SCALE = 0.1;
+	private static final double GLIDESLOPE_INDICATOR_SCALE = 0.3;
 	private static final double WHEEL_STICK_ZONE = 0.1;
 	private static final double THROTTLE_INPUT_SCALE = 0.0005;
 	public static final int N_CLOUD_IMAGES = 8;//4 original, plus 4 flipped
@@ -398,9 +398,6 @@ public class Game {
 			type = Aircraft.Type.SHUTTLE;
 			Debug.print("Game.java:Game(...): at cannot be null, using default aircraft");
 		}
-		
-		System.out.println("map p1s " + Map.PLAYER_1_START);
-		System.out.println("map p1v " + Map.PLAYER_1_VECTOR);
 		
 		//create aircraft
 		at = (type == Aircraft.Type.SHUTTLE) ? Aircraft.Type.TANKER : Aircraft.Type.SHUTTLE;
@@ -687,7 +684,7 @@ public class Game {
 				cloudBounds = new Rectangle(side, side);
 		}
 
-		Debug.print("cloud bounds are " + side);
+		//Debug.print("cloud bounds are " + side);
 		bg = new Background(this, playerAircraft.getVector(), p, viewport, terrainTiles, skyTile, groundTiles
 			, map, cloudBounds, BG_SCALE, GROUND_SCALE, CLOUD_SCALE, MOUNTAIN_SCALE, Map.GROUND_ALTITUDE, TARGET_FPS);
 
@@ -750,11 +747,6 @@ public class Game {
 
 		if(Debug.verbose) {
 			Debug.print("Game.java:Game(...): window created and set to visible");
-		}
-
-
-
-		if(Debug.verbose) {
 			Debug.print("Game.java:Game(...): game started!");
 		}
 
@@ -896,12 +888,7 @@ public class Game {
 		}
 	}
 
-
-
 	private Point clickLocation;
-
-
-
 
 	/**
 	* Callback function for the mouse listener. Receives a code representing the type of mouse
@@ -940,8 +927,6 @@ public class Game {
 		}
 	}
 
-
-
 	/**
 	* End the game and close the application.
 	*/
@@ -976,49 +961,6 @@ public class Game {
 		g2d.dispose();
 		return compat;
 	}
-
-
-	/**
-	* Main game loop.
-	*/
-	/*public void gameLoop() {
-		double delay = 0;
-		double minDelay = 0.5;
-		double tick = 0;
-		double endTime;
-		double startTime;
-
-		targetDelta = 1000 / TARGET_FPS;
-		deltaTime = targetDelta;//arbitrary for frame 0 delta time
-
-		delay = 0;
-
-		startTime = System.currentTimeMillis();
-
-		frame.render(deltaTime);
-
-		endTime = System.currentTimeMillis();
-
-		deltaTime = endTime - startTime;
-
-		if(deltaTime < targetDelta) {
-			delay = targetDelta - deltaTime;
-		} else {
-			delay = minDelay;
-		}
-
-		System.out.println("target delta " + targetDelta + " ms");
-		System.out.println("delta time " + deltaTime + " ms");
-		System.out.println("Sleeping thread for " + delay + " ms");
-
-		try {
-			Thread.sleep((long)delay);
-		} catch (Exception e) {
-			Debug.print("Game.java:Frame:gameLoop(): error sleeping thread");
-		}
-
-		tick += deltaTime;
-	}*/
 
 	/*
 	* Activates AI autopilot upon receiving call from a timed event handler.
@@ -1213,6 +1155,8 @@ public class Game {
 					.getAirspeed() / SFX_WIND_MAX_SPEED), 1.0f);
 				sound.update(turbineSpeed, playerSpeed);
 
+				//Debug.print(Vector.create(playerAircraft.getLocation(), computerAircraft.getLocation())
+					//.getMagnitude() + "");
 				if(Vector.create(playerAircraft.getLocation(), computerAircraft.getLocation())
 					.getMagnitude() < TERRAIN_MODE_LIMIT) {
 					Collision.TERRAIN_MODE = false;
@@ -1235,11 +1179,11 @@ public class Game {
 				
 				//display win message and pause game if condition met
 				if(gameObjective.hasPlayerWon()) {
-					imageMidpoint = new Point(winMessage.getWidth() / 2
-						, winMessage.getHeight() / 2);
-					tasks.push(new DrawingTask(winMessage, Space.SCREEN, SCREEN_WIDTH / 2
-						- imageMidpoint.getX(), SCREEN_HEIGHT / 2 - imageMidpoint.getY()
-						, 0));
+					//imageMidpoint = new Point(winMessage.getWidth() / 2
+					//	, winMessage.getHeight() / 2);
+					//tasks.push(new DrawingTask(winMessage, Space.SCREEN, 
+					//	, , 0));
+					Debug.print("Game.java: You win!");
 					panel.setTasks(tasks);
 					panel.repaint();
 					pause();
@@ -1433,7 +1377,8 @@ public class Game {
 				tasks.push(new DrawingTask("- -", HORIZONTAL_RULE_Y, SCREEN_HEIGHT
 					- PLAYER_SCREEN_Y, DrawingTask.Type.STRING));
 				tasks.push(new DrawingTask(n.format(playerAircraft.getAGL() + TERRAIN_ORIGIN.getY()) + "m"
-					, ALTITUDE_LABEL_OFFSET, PLAYER_SCREEN_Y, null));
+					, ALTITUDE_LABEL_OFFSET, SCREEN_HEIGHT - PLAYER_SCREEN_Y, DrawingTask.Type.STRING));
+					
 				tasks.push(new DrawingTask("|", PLAYER_SCREEN_X, HORIZONTAL_RULE_Y
 					, DrawingTask.Type.STRING));
 				n.setMaximumFractionDigits(2);
@@ -1569,7 +1514,7 @@ public class Game {
 						}
 					} else {
 						for(Point collisionPoint : Collision.getNearestPoints()) {
-							Debug.print("" + collisionPoint);
+							//Debug.print("" + collisionPoint);
 							tempPoint = pointToWorldSpace(collisionPoint.copy(), 0);
 							tasks.push(new DrawingTask(nearestPoint, tempPoint, screenTransform
 								, imageMidpoint, 0));
@@ -1763,8 +1708,8 @@ public class Game {
 					, speedIndicatorOffsetY, 0));
 				NumberFormat airspeedFormat = NumberFormat.getInstance();
 				airspeedFormat.setMaximumFractionDigits(0);
-				subTasks.push(new DrawingTask("" + airspeedFormat.format(-Collision.mpsToKnots(playerAircraft.getAirspeed())), 8
-					, 15, null));
+				//subTasks.push(new DrawingTask("" + airspeedFormat.format(-Collision.mpsToKnots(playerAircraft.getAirspeed())), 8
+				//	, 15, null));
 				speedIndicatorY = SCREEN_HEIGHT - SPEED_TAPE_Y;
 				final int speedLabelPaddingY = 15;
 				final int speedLabelPaddingX = 5;
@@ -1818,7 +1763,7 @@ public class Game {
 				int attitudeX = attitudeBacking.getWidth() / 2 - attitudeIndicator.getWidth() / 2;
 				subTasks.push(new DrawingTask(attitudeIndicator, Space.SCREEN, attitudeX, attitudeY, 0));
 				subTasks.push(new DrawingTask(attitudeBacking, Space.SCREEN, 0, 0, 0));
-				subTasks.push(new DrawingTask("" + n.format(ath), 5, 15, null));
+				//subTasks.push(new DrawingTask("" + n.format(ath), 5, 15, null));
 				at2 = new AffineTransform();
 				at2.translate(currentX, currentY);
 				clip = new Rectangle2D.Float(0, 0, attitudeBacking.getWidth(), attitudeBacking.getHeight());
@@ -2115,7 +2060,7 @@ public class Game {
 
 	private class Objective {
 		private static final int FUEL_RATE = 5000;
-		private static final int WIN_AIRSPEED_LIMIT = 15;
+		private static final double WIN_AIRSPEED_LIMIT = 10;
 		private boolean connected;
 		private boolean transferring;
 		private boolean navAcquired;
@@ -2128,8 +2073,11 @@ public class Game {
 		public boolean hasPlayerWon() {
 			boolean b = false;
 			Aircraft a1 = players.get(PLAYER1).isFlying();
-			if(a1.isLanded() && a1.fuelTankFull() && a1.getAirspeed() < WIN_AIRSPEED_LIMIT)
+			//Debug.print("a1.getAirspeed() " + a1.getAirspeed());
+			if(a1.isLanded() && a1.fuelTankFull()
+				&& Math.abs(a1.getAirspeed()) < WIN_AIRSPEED_LIMIT)
 				b = true;
+			
 			return b;
 		}
 

@@ -1,9 +1,10 @@
 package src;//checked!
 
 public class Glideslope {
-	public static final double ANGLE = 3.0;//DEGREES
+	public static final double ANGLE = 6;//DEGREES
 	public static final double DEPTH = 1.4;//DEGREES
 	public static final double RANGE = 3000;//meters
+	public static final int START_OFFSET = 200;//meters
 	private double depth;
 	private double angle;
 	private Point start;
@@ -24,7 +25,7 @@ public class Glideslope {
 
 	private void loadDefaults() {
 		Vector temp = new Vector(center);
-		start = new Point(Map.RUNWAY_B_START + 50, Game.TERRAIN_HEIGHT);
+		start = new Point(Map.RUNWAY_2_START + START_OFFSET, Map.GROUND_ALTITUDE);
 		end = new Point(start.getX() + center.getX()
 			, start.getY() + center.getY());
 		temp.scale(0.75);
@@ -38,6 +39,8 @@ public class Glideslope {
 		temp.scale(0.25);
 		innerMarker = new Point(start.getX() + temp.getX()
 			, start.getY() + temp.getY());
+			
+			Debug.print("start " + start);
 	}
 
 	public Point getStart() {

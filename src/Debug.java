@@ -13,7 +13,7 @@ import java.util.Calendar;
 * To print a message in this application call the print(...) method.
 */
 class Debug {
-	public static boolean verbose = true;
+	public static boolean verbose = false;
 	private static final String LOG_FILE = "debug.txt";
 	private static boolean toConsole;
 	private static boolean toFile;

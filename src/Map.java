@@ -40,10 +40,6 @@ public class Map {
 
 		public static final int MAP_START = 0;
 		public static final int RUNWAY_LENGTH = 5000;
-		public static final int RUNWAY_A_START = 300;
-		public static final int RUNWAY_A_END = RUNWAY_A_START + RUNWAY_LENGTH;
-		public static final int RUNWAY_B_START = 50000;
-		public static final int RUNWAY_B_END = RUNWAY_B_START + RUNWAY_LENGTH;
 		public static final int HEIGHT = 300;
 
 		public static final int N_PARAMETERS = 33;
@@ -156,9 +152,9 @@ public class Map {
 					c++;
 				}
 
-				for(int i = 0; i < parameters.length; i++) {
-					Debug.print(" " + parameters[i]);
-				}
+				//for(int i = 0; i < parameters.length; i++) {
+				//	Debug.print(" " + parameters[i]);
+				//}
 
 				
 				if(c == N_PARAMETERS) {

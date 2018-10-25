@@ -291,80 +291,72 @@ class DrawingTask {
 		//	transform.translate(-mid.getX(), -mid.getY());
 	  }
 
-		/**
-		* Create a task for a vector "v".
-		* A line representing this vector will be drawn with label "s".
-		*/
-		DrawingTask(Vector v, String s, Point loc, Point translate, Color c, double st) {
-			space = Space.WORLD;
-			type = Type.VECTOR;
-			scale = DEFAULT_SCALE;
-			location = loc;
-			stroke = (int) st;
+	/**
+	* Create a task for a vector "v".
+	* A line representing this vector will be drawn with label "s".
+	*/
+	DrawingTask(Vector v, String s, Point loc, Point translate, Color c, double st) {
+		space = Space.WORLD;
+		type = Type.VECTOR;
+		scale = DEFAULT_SCALE;
+		location = loc;
+		stroke = (int) st;
 
-			if(v != null) {
-				image = null;
-				vector = v;
-			} else {
-				Debug.print("DrawingTask.java:DrawingTask(...): v cannot be null");
-				throw new IllegalArgumentException("Invalid initializer, see log");
-			}
-
-			if(s != null)
-				text = s;
-			else
-				s = "";
-
-			if(c != null)
-				color = c;
-			else
-				color = DEFAULT_COLOR;
-
-			transform = new AffineTransform();
-			transform.translate(location.getX(), location.getY());
-			transform.translate(translate.getX(), translate.getY());
-			transform.setToTranslation(transform.getTranslateX()
-				, Game.SCREEN_HEIGHT - transform.getTranslateY());
+		if(v != null) {
+			image = null;
+			vector = v;
+		} else {
+			Debug.print("DrawingTask.java:DrawingTask(...): v cannot be null");
+			throw new IllegalArgumentException("Invalid initializer, see log");
 		}
 
-		DrawingTask(Vector v, String s, Point loc, Point translate
-			, Color c) {
-			this(v, s, loc, translate, c, DEFAULT_STROKE);
-		}
+		if(s != null)
+			text = s;
+		else
+			s = "";
 
-		/**
-		* Create a task for a Shape "s".
-		*/
-		DrawingTask(Shape s, Point translate, Color c) {
+		if(c != null)
 			color = c;
-			scale = DEFAULT_SCALE;
-			location = new Point(0, 0);
-			type = Type.SHAPE;
+		else
+			color = DEFAULT_COLOR;
 
-			if(s != null) {
-				image = null;
-				shape = s;
-				text = "";
-				vector = null;
-			} else {
-				Debug.print("DrawingTask.java:DrawingTask(...): s cannot be null");
-				throw new IllegalArgumentException("Invalid initializer, see log");
-			}
+		transform = new AffineTransform();
+		transform.translate(location.getX(), location.getY());
+		transform.translate(translate.getX(), translate.getY());
+		transform.setToTranslation(transform.getTranslateX()
+			, Game.SCREEN_HEIGHT - transform.getTranslateY());
+	}
 
-			transform = new AffineTransform();
-			transform.translate(location.getX(), location.getY());
-			transform.translate(translate.getX(), translate.getY());
-			transform.setToTranslation(transform.getTranslateX()
-				, Game.SCREEN_HEIGHT - transform.getTranslateY());
+	DrawingTask(Vector v, String s, Point loc, Point translate
+		, Color c) {
+		this(v, s, loc, translate, c, DEFAULT_STROKE);
+	}
+
+	/**
+	* Create a task for a Shape "s".
+	*/
+	DrawingTask(Shape s, Point translate, Color c) {
+		color = c;
+		scale = DEFAULT_SCALE;
+		location = new Point(0, 0);
+		type = Type.SHAPE;
+
+		if(s != null) {
+			image = null;
+			shape = s;
+			text = "";
+			vector = null;
+		} else {
+			Debug.print("DrawingTask.java:DrawingTask(...): s cannot be null");
+			throw new IllegalArgumentException("Invalid initializer, see log");
 		}
 
-
-
-
-
-
-
-
+		transform = new AffineTransform();
+		transform.translate(location.getX(), location.getY());
+		transform.translate(translate.getX(), translate.getY());
+		transform.setToTranslation(transform.getTranslateX()
+			, Game.SCREEN_HEIGHT - transform.getTranslateY());
+	}
 
 	public Point getClipLocation() {
 		return clipLoc;
