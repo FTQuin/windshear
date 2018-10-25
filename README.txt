@@ -39,7 +39,7 @@ Default level:
 	or too low on your approach to the runway (above middle = too high, below middle = too low)
 14. Lower the landing gear by pressing "G".
 15. As you slow down, press "V" to lower flaps. Do it one step at a time and adjust your flight path
-    for optimal glide. Keep the glideslop indicator centered.
+    for optimal glide. Keep the glideslope indicator centered.
 	15 - Flare right before touchdown by sharply pitching upward. If you land too hard the gear will break
 	and you will crash.
 16. After touchdown, immediately cut thrust to minimum, press "B" to activate speed brakes,
@@ -57,6 +57,7 @@ and creating documentation once I finish the remaining features, which are:
 
 - Sound module
 - CAS warnings
+- Failure conditions
 - Crash animation
 - ...
 

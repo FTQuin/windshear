@@ -2,7 +2,7 @@
 72000       	#thrust 72000
 287		#surface area 287
 49      	#wing area 49
-3.0		#angle of incidence
+6.0		#angle of incidence
 1.5             #elevator coef
 0.001           #gear drag coef
 500000.0	#brakes friction coef

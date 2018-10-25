@@ -50,7 +50,7 @@ public class Game {
 	public static final int PHYS_PER_FRAME = 2;
 	public static final int NOZZLE_ATTRACT_DISTANCE = 3;
 	public static final double C_NOZZLE = 100.0;
-	public static final double PLAYER_SPRITE_SCALE = 1.0;
+	public static final double PLAYER_SPRITE_SCALE = 0.9;
 
 	static {
 		FRAME_DELAY = MS_PER_S / TARGET_FPS;
@@ -62,8 +62,8 @@ public class Game {
 
 	/* Game constants */
 	private static final double FG_SCALE = 18.0 * PLAYER_SPRITE_SCALE;
-	private static final double BG_SCALE = 4.0;
-	public static final double MOUNTAIN_SCALE = 8.0;
+	private static final double BG_SCALE = 5.0;
+	public static final double MOUNTAIN_SCALE = 9.0;
 	public static final double MOUNTAIN_TILE_SCALE = 4.0;
 	public static final int MOUNTAIN_SCREEN_OFFSET = -430;//hack
 	private static final double BG_TILE_SCALE = 3.5;
@@ -80,7 +80,6 @@ public class Game {
 	private static final int ENV_HEIGHT = 100000;
 	private static final int ENV_SCALE = 800;
 	private static final int CEILING = 1000;
-	public static final int TERRAIN_HEIGHT = 300;//meters
 	public static final int REFUEL_ALTITUDE = 3000;//meters
 	private static final int PLAYER1 = 0;
 	private static final int PLAYER2 = 1;
@@ -99,7 +98,7 @@ public class Game {
 	private static final int WIND_VECTOR_X = 25;
 	private static final int WIND_VECTOR_Y = 18;
 	private static final int PLAYER_SCREEN_X = 600;
-	private static int PLAYER_SCREEN_Y = 400;
+	private static int PLAYER_SCREEN_Y = 360;
 	private static final int GROUND_OFFSET = 33;
 	private static final int TURBINE_VECTOR_WIDTH = 8;
 	private static final int AP_PRINTOUT_X = 300;
@@ -127,6 +126,8 @@ public class Game {
 	private static final int ATTITUDE_Y = 70;
 	private static final int ATTITUDE_INDICATOR_X = 5;
 	private static final int ATTITUDE_INDICATOR_y = 10;
+	private static final int HUD_BACKING_OFFSET_X = -38;
+	private static final int HUD_BACKING_OFFSET_Y = -10;
 	private static final float ATTITUDE_ATH_SCALE = 2.2f;
 	private static final int PITCH_X = 600;
 	private static final int PITCH_Y = 70;
@@ -157,19 +158,12 @@ public class Game {
 	public static final int POSITION_LABEL_OFFSET = 17;
 	public static final int SHUTTLE_GROUND_OFFSET = -10;
 	public static final int TANKER_GROUND_OFFSET = -7;
-	private static final int WP_1_X = 1000;
-	private static final int WP_1_Y = TERRAIN_HEIGHT + 30;
-	private static final int WP_2_X = 5000;
-	private static final int WP_2_Y = TERRAIN_HEIGHT + 500;
-	private static final int WP_3_X = 10000;
-	private static final int WP_3_Y = TERRAIN_HEIGHT + 1500;
-	private static final int WP_4_X = 15000;
-	private static final int WP_4_Y = TERRAIN_HEIGHT + 1500;
-	private static final int WP_5_X = 20000;
-	private static final int WP_5_Y = TERRAIN_HEIGHT + 500;
-	private static final int WP_6_X = 25000;
-	private static final int WP_6_Y = TERRAIN_HEIGHT + 30;
 	private static final int NUM_ARROWS = 4;
+	
+	private static final int BG_SCREEN_OFFSET = 120;
+	
+	
+	
 	//x must be multiple of segment size in Terrain class!
 	private static Point TERRAIN_ORIGIN;
 	/*instance variables and components*/
@@ -260,6 +254,7 @@ public class Game {
 	private BufferedImage gearTransit;
 	private BufferedImage nozzle;
 	private BufferedImage waypoint;
+	private BufferedImage hudBacking;
 	private double p2X;
 	private double p2Y;
 	private boolean ready;
@@ -479,6 +474,7 @@ public class Game {
 			waypointBacking = getCompatibleImage(ImageIO.read(new File("png/waypoint_backing.png")));
 			tankerIcon = getCompatibleImage(ImageIO.read(new File("png/tanker_icon.png")));
 			arrow = getCompatibleImage(ImageIO.read(new File("png/Arrow.png")));
+			hudBacking = getCompatibleImage(ImageIO.read(new File("png/hud_backing.png")));
 		} catch(IOException ex) {
 			Debug.print("Game.java: Game(): Error loading a PNG file");
 					ex.printStackTrace();
@@ -1210,7 +1206,7 @@ public class Game {
 				computerScreenTransform.translate(PLAYER_SCREEN_X, playerScreenY);
 				bgTransform = new Point(worldTransform).scale(-BG_SCALE);
 				bgTransform.translate(PLAYER_SCREEN_X, playerScreenY
-					/ (FG_SCALE / BG_SCALE) - 100);//temp
+					/ (FG_SCALE / BG_SCALE) - BG_SCREEN_OFFSET);//temp
 				cloudTransform = new Point(worldTransform).scale(-CLOUD_SCALE);
 				cloudTransform.translate(PLAYER_SCREEN_X, playerScreenY
 					/ (FG_SCALE / CLOUD_SCALE));
@@ -1616,6 +1612,14 @@ public class Game {
 				//Create the landing gear indicator
 				BufferedImage gi;
 
+				at2 = new AffineTransform();
+				at2.translate(currentX + HUD_BACKING_OFFSET_X, HUD_START_Y + HUD_BACKING_OFFSET_Y);
+				subTasks = new Queue();
+				//subTasks.push(new DrawingTask(, Space.SCREEN, 0, 0, 0));
+				clip = new Rectangle2D.Float(0, 0, hudBacking.getWidth(), hudBacking.getHeight());
+				tasks.push(new DrawingTask(hudBacking, subTasks, at2, clip));
+				
+				
 				if(!playerAircraft.gearStowed() && playerAircraft.gearLocked())
 					gi = gearDown;
 				else if(playerAircraft.gearLocked())
@@ -1668,17 +1672,31 @@ public class Game {
 					, flapGaugeIndicator.getWidth() + flapIndicatorOffsetX
 					, flapGaugeIndicator.getHeight()));
 					
-				if(playerAircraft.speedBrakesDeployed()) {
+				if(playerAircraft.speedBrakesDeployed())
 					subTasks.push(new DrawingTask(speedBrakeWarning, Space.SCREEN
-					, SPEED_BRAKE_WARN_X
-					, SPEED_BRAKE_WARN_Y
-					, Math.toRadians(playerAircraft.flapSetting()) * flapsIndicatorScale
+					, SPEED_BRAKE_WARN_X, SPEED_BRAKE_WARN_Y, 0.0
 					, flapGaugeIndicator.getWidth() + flapIndicatorOffsetX
 					, flapGaugeIndicator.getHeight()));
-				}
 				
 				tasks.push(new DrawingTask(flapGauge, subTasks, at2, clip));
 				currentX += flapGauge.getWidth();
+				
+				//create the weather radar
+				NumberFormat nf = NumberFormat.getInstance();
+				nf.setMaximumFractionDigits(0);
+				at2 = new AffineTransform();
+				at2.setToTranslation(currentX, currentY);
+				clip = new Rectangle2D.Float(0, 0, windRadar.getWidth(), windRadar.getHeight());
+				subTasks = new Queue();
+				subTasks.push(new DrawingTask(windArrow, Space.SCREEN, WIND_VECTOR_X, WIND_VECTOR_Y
+					, -playerAircraft.getActingWind().getDirection() - Math.PI / 2 //hack
+					, windArrow.getWidth() / 2, windArrow.getHeight() / 2));
+				double windSpeed = (playerAircraft.getActingWind().getMagnitude() / Map.MAX_WIND) * 100;
+				subTasks.push(new DrawingTask(nf.format(windSpeed) + "%"
+					, 5, 15, null));
+				//subTasks.push(new DrawingTask("" + n.format(ath), 5, 15, null));
+				tasks.push(new DrawingTask(windRadar, subTasks, at2, clip));
+				currentX += windRadar.getWidth();
 				
 				//create tasks for the speed tape
 				final int speedIndicatorOffset = speedTapeIndicator.getWidth() / 2;
@@ -1783,23 +1801,7 @@ public class Game {
 				clip = new Rectangle2D.Float(0, 0
 					, pitchBacking.getWidth(), pitchBacking.getHeight());
 				tasks.push(new DrawingTask(pitchBacking, subTasks, at2, clip));
-				currentX += pitchBacking.getWidth();
-				
-				//create the weather radar
-				NumberFormat nf = NumberFormat.getInstance();
-				nf.setMaximumFractionDigits(1);
-				at2 = new AffineTransform();
-				at2.setToTranslation(currentX, currentY);
-				clip = new Rectangle2D.Float(0, 0, windRadar.getWidth(), windRadar.getHeight());
-				subTasks = new Queue();
-				subTasks.push(new DrawingTask(windArrow, Space.SCREEN, WIND_VECTOR_X, WIND_VECTOR_Y
-					, -playerAircraft.getActingWind().getDirection() - Math.PI / 2 //hack
-					, windArrow.getWidth() / 2, windArrow.getHeight() / 2));
-				subTasks.push(new DrawingTask(nf.format(playerAircraft.getActingWind().getMagnitude())
-					, 5, 15, null));
-				//subTasks.push(new DrawingTask("" + n.format(ath), 5, 15, null));
-				tasks.push(new DrawingTask(windRadar, subTasks, at2, clip));
-				currentX += windRadar.getWidth();
+				currentX += pitchBacking.getWidth();			
 				
 				//create the glideslope indicator
 				final int paddX = 0;
@@ -1867,6 +1869,7 @@ public class Game {
 					wLabelX = 75;
 					subTasks.push(new DrawingTask(wpDistLabel, wLabelX, wLabelY, DrawingTask.Type.STRING));
 					tasks.push(new DrawingTask(waypointBacking, subTasks, at2, clip));
+					//currentX += waypointBacking.getWidth();
 				}
 				
 				/* Draw extra UI elements*/
