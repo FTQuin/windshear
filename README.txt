@@ -9,6 +9,8 @@ How to play:
 
 Run test.bat from a Windows machine*
 
+Run chmod 700 ./mactest.sh and then ./mactest 
+
 * Other platforms are not supported right now because of the in-progress sound module
 that uses unsupported features on some Linux distros
 
