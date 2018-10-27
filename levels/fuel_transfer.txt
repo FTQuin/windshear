@@ -9,8 +9,8 @@ Intercept fuel tanker in flight above mountains, transfer required fuel, and del
 40 #step size
 2500 #mountain height
 8000 #mountain width
-8725 #mountain 1 start
-66000 #mountain 2 start
+8725 #mountain 1 start #must be a multiple of step size (currently defined as static field in Terrain.java)
+47325 #mountain 2 start # ^^^^^
 7000 #runway 1 start
 1700 #runway 1 length
 60000 #runway 2 start
@@ -23,7 +23,7 @@ Approach
 Landing #last waypoint label
 0.0, 0.05 #player 1 vector must be greater than 0 //0.02
 0.0, 0.9 #player 2 vector
-7050, 402.5 #player 1 start 
+7050, 402 #player 1 start 
 2000, 3000 #player 2 start
 7100, 400 #0 waypoint
 13200, 1750 #1

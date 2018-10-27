@@ -517,11 +517,11 @@ class Aircraft implements Collidable {
 			loadAircraft(t);
 		}
 
-		System.out.println("creating queue");
+		//System.out.println("creating queue");
 		speedRecordTimeElapsed = 0;
 		locations = new Queue(N_SPEED_RECORDS);
 		locations.setDropout();
-		System.out.println("queue created");
+		//System.out.println("queue created");
 
 		/*speedRecords = new double[N_SPEED_RECORDS];
 		for(int i = 0; i < speedRecords.length; i++) {
@@ -545,7 +545,7 @@ class Aircraft implements Collidable {
 			airspeed = v.getMagnitude();
 		}
 
-		Debug.print("hose is init to " + motion.getMagnitude());
+		//Debug.print("hose is init to " + motion.getMagnitude());
 
 		if(type == Type.TANKER) {
 			fuelBoom = new Hose(getTail(), motion, BOOM_NUM_SECTIONS, BOOM_SECTION_MASS, BOOM_SECTION_LENGTH);

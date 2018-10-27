@@ -163,8 +163,8 @@ public class Game {
 	private static final int BG_SCREEN_OFFSET = 120;
 	
 	
+	//most of this can be refactored to an associative data structure
 	
-	//x must be multiple of segment size in Terrain class!
 	private static Point TERRAIN_ORIGIN;
 	/*instance variables and components*/
 	private Aircraft playerAircraft;
@@ -182,6 +182,7 @@ public class Game {
 	private Objective gameObjective;
 	private Environment environment;
 	private Terrain terrain;
+	private Terrain terrain2;
 	private Controller controller;
 	private Random rand;
 	private Background bg;
@@ -193,8 +194,7 @@ public class Game {
 	private Wind windEvent;
 	private Aircraft.Type type;
 	private Glideslope glideslope;
-	private Sound sound;
-	private SoundClip soundClip;
+	//private Sound sound;
 	private Animation mainGearAnimation;
 	private Animation mainWheelAnimation;
 	private Animation noseGearAnimation;
@@ -343,8 +343,7 @@ public class Game {
 	* Refuel your aircraft, don't spill too much fuel.
 	*/
 	Game(Aircraft.Type at) {
-		sound = new Sound();
-		soundClip = new SoundClip(this);
+		//sound = new Sound();
 		ArrayList<BufferedImage> allImages = new ArrayList<BufferedImage>();
 		String path;
 		fps = 0;
@@ -365,8 +364,7 @@ public class Game {
 		cloudTransform = new Point(0, 0);
 		imageMidpoint = new Point(0, 0);
 		map = new Map(DEFAULT_LEVEL);
-		TERRAIN_ORIGIN = new Point(Terrain.SEGMENT_SIZE
-			, Map.GROUND_ALTITUDE);
+		TERRAIN_ORIGIN = new Point(Terrain.SEGMENT_SIZE, Map.GROUND_ALTITUDE);
 		GPWS_QUAD_SIZE = (int) TERRAIN_ORIGIN.getY() - 50;
 		GPWS_MAX = (int) TERRAIN_ORIGIN.getY() + GPWS_QUAD_SIZE;
 		
@@ -385,7 +383,7 @@ public class Game {
 		players = new ArrayList<Pilot>();
 		playerImages = new BufferedImage[NUM_PLAYERS];
 		targetDelta = MS_PER_S / TARGET_FPS / PHYS_PER_FRAME;
-		Debug.print("targetDelta " + targetDelta);
+		//Debug.print("targetDelta " + targetDelta);
 
 		if(at != null) {
 			type = at;
@@ -545,6 +543,7 @@ public class Game {
 		controller = new Controller(environment);
 		origin = new Point(0, Map.GROUND_ALTITUDE);
 		terrain = new Terrain(new Point(Map.MOUNTAIN_1_START, Map.GROUND_ALTITUDE));
+		terrain2 = new Terrain(new Point(Map.MOUNTAIN_2_START, Map.GROUND_ALTITUDE));
 		trace = new ArrayList<Point>();
 		// Refactor this to a level file
 		waypoints = new ArrayList<Waypoint>();
@@ -756,9 +755,7 @@ public class Game {
 
 			if(gameMode == GameMode.GAME) {
 				eventTimer.start();
-				//soundClip.playSound(SFX_ENG);
 			} else {
-				//soundClip.playSound(SFX_MUSIC);
 			}
 	}
 
@@ -784,7 +781,6 @@ public class Game {
 				break;
 			case GEAR:
 				int dir = players.get(PLAYER1).isFlying().toggleGear();//toggle landing gear
-				//soundClip.playSound(SFX_GEAR);
 				
 				if(dir > 0) {
 					mainGearAnimation.forward();
@@ -1088,14 +1084,15 @@ public class Game {
 			DrawingTask currentTask;
 			Point origin = new Point(0, Map.GROUND_ALTITUDE);
 			Point p;
-
-			if(step > MAX_STEP)
+			tasks = new Queue();
+			
+			if(step > MAX_STEP)//for simulation stability when frametime exceeds fixed step size
 				step = MAX_STEP;
 
 			time = System.nanoTime();
 			tick += delta;
 			currentFrame++;
-			tasks = new Queue();
+			
 			
 			if(tick >= NS_PER_S) {
 				Debug.print("Game.java: frames per second " + currentFrame);
@@ -1134,7 +1131,7 @@ public class Game {
 					.testForGroundCollision((float) playerAircraft.getVector().getY()
 					, (float) playerAircraft.getAGL(), gLocked);
 			
-				if(playGPWS)
+				/*if(playGPWS)
 					sound.enableSfxGroundWarning();
 				else
 					sound.resetGpws();
@@ -1143,14 +1140,22 @@ public class Game {
 				if(players.get(PLAYER1).isFlying().isLanded())
 					sound.enableSfxRolling();
 				else
-					sound.disableSfxRolling();
+					sound.disableSfxRolling();*/
 
-				float turbineSpeed = (float) players.get(PLAYER1).isFlying()
-					.getTurbineSpeed();
-				float playerSpeed = Math.min((float) (players.get(PLAYER1).isFlying()
-					.getAirspeed() / SFX_WIND_MAX_SPEED), 1.0f);
-				sound.update(turbineSpeed, playerSpeed);
+				/*sound.update((float) players.get(PLAYER1).isFlying().getTurbineSpeed()
+					, Math.min((float) (players.get(PLAYER1).isFlying().getAirspeed()
+					/ SFX_WIND_MAX_SPEED), 1.0f));*/
 
+				
+				Terrain currentTerrain;
+				
+				//if(playerAircraft.getLocation().getX() <= Map.MOUNTAIN_1_START + Map.MOUNTAIN_WIDTH)
+					currentTerrain = terrain;
+				//else {
+				//	currentTerrain = terrain2;
+					//Debug.print("is terrain2");
+				//}
+				
 				//Debug.print(Vector.create(playerAircraft.getLocation(), computerAircraft.getLocation())
 					//.getMagnitude() + "");
 				if(Vector.create(playerAircraft.getLocation(), computerAircraft.getLocation())
@@ -1158,18 +1163,19 @@ public class Game {
 					Collision.TERRAIN_MODE = false;
 					
 					//Test for aircraft collision
-					if(Collision.objectCollision(new Collidable[]{playerAircraft, computerAircraft})) {
+					if(Collision.objectCollision(new Collidable[]{playerAircraft
+						, computerAircraft})) {
 						Debug.print("Game.java: Midair collision!");
 						pause();
 						//end(GameState.MIDAIR_COLLISION);
 					}
-				} else {
+				} else {//Test for collision with terrain
 					Collision.TERRAIN_MODE = true;
-					
-					//Test for collision with terrain
-					if(Collision.objectCollision(new Collidable[]{playerAircraft, terrain})) {
+
+					if(Collision.objectCollision(new Collidable[]{playerAircraft, currentTerrain})) {
 						Debug.print("Game.java: Player aircraft collided with terrain!");
 						pause();
+						//end(GameState.CRASHED_TERRAIN);
 					}
 				}
 				
@@ -1193,7 +1199,8 @@ public class Game {
 				double playerScreenY = PLAYER_SCREEN_Y;
 				bg.setCenter(worldTransform);
 				bg.setDirection(playerAircraft.getVector().flip().normalize());
-				terrain.setCenter(worldTransform);
+				terrain.setCenter(worldTransform);//refactor
+				terrain2.setCenter(worldTransform);
 				Point ground = bg.getGroundLayerCenter().translate(screenTransform);
 				ground.setY(SCREEN_HEIGHT - playerScreenY - ground.getY());
 
@@ -1233,16 +1240,16 @@ public class Game {
 				for(DrawingTask mountainTask : bg.generateMountains()) {
 					tasks.push(mountainTask);
 				}
-
+					
 				//Create tasks for terrain quads and vertices
-				for(Quad q : terrain.getQuads()) {
+				for(Quad q : currentTerrain.getQuads()) {
 					q.scale(FG_SCALE);
 					q.setLocation(Point.subtract(q.getOrigin(), worldTransform).scale(FG_SCALE));
 					q.translate(worldTransform.getX() * FG_SCALE, worldTransform.getY() * FG_SCALE);
 					tasks.push(new DrawingTask(q, screenTransform, terrainColor));
 				}
 
-				ArrayList<Point> vertices = terrain.getVertices();
+				ArrayList<Point> vertices = currentTerrain.getVertices();
 				p = new Point(0, 0);
 				imageMidpoint = new Point(nearestPoint.getWidth() / 2
 					, nearestPoint.getHeight() / 2);
@@ -1251,7 +1258,7 @@ public class Game {
 					tasks.push(groundTask);
 				}
 
-				for(Point terrainVertex : terrain.getMesh()) {
+				for(Point terrainVertex : currentTerrain.getMesh()) {
 					p = terrainVertex.copy();
 					p.setLocation((p.getX() - worldTransform.getX()) * FG_SCALE
 						, (p.getY()- worldTransform.getY()) * FG_SCALE);
@@ -1818,7 +1825,7 @@ public class Game {
 				final int indicatorMaxY = (int) targetY;
 				int indicatorY = (int)(gsDev * GLIDESLOPE_INDICATOR_SCALE);
 				indicatorY = (int)(Math.signum(indicatorY) * Math.min(indicatorMaxY, Math.abs(indicatorY)));
-				subTasks.push(new DrawingTask(glideslopeIndicator, Space.SCREEN,(int) targetX, (int) targetY + indicatorY, 0));
+				subTasks.push(new DrawingTask(glideslopeIndicator, Space.SCREEN,(int) targetX, (int) targetY - indicatorY, 0));
 				tasks.push(new DrawingTask(glideslopeGauge, subTasks, at2, clip));
 				currentX += glideslopeGauge.getWidth();
 

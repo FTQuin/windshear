@@ -7,7 +7,7 @@ import java.util.Iterator;
 class Terrain implements Collidable {
 	private static final int N_VERTICES = 1000;
 	private static final int N_VERTICES_PER_SEGMENT = 30;//if this is even the terrain quads only appear every second segment... why?
-	private static final double MAX_SLOPE = 0.4;
+	private static final double MAX_SLOPE = 0.35;
 	/* reducing D_STEP improves collision detection by adding more points to the mesh -
 	   a commensurate decrease in the collision radius of the aircraft's mesh
 	   might be necessary to avoid false collisions */
@@ -19,7 +19,7 @@ class Terrain implements Collidable {
 	   - setting this will cause nearest points to appear at an offset from player location */
 	//private static final int COLLISION_OFFSET = -275;
 	public static final int COLLISION_OFFSET = 0;
-	private static final int STEEPNESS = 4;
+	private static final int STEEPNESS = 3;
 //	private ArrayList<Point> vertices;
 	private LinkedHashMap<Integer, ArrayList<Point>> vertices;
 	private Point center;
@@ -95,8 +95,7 @@ class Terrain implements Collidable {
 		ground = g;
 		x = ground.getX();
 		y = ground.getY() - D_STEP;
-		vertices = new LinkedHashMap<Integer
-			, ArrayList<Point>>(N_VERTICES_PER_SEGMENT);
+		vertices = new LinkedHashMap<Integer, ArrayList<Point>>(N_VERTICES_PER_SEGMENT);
 		center = new Point(0, 0);
 		
 		for(int i = 0; i < numSegments; i++) {
